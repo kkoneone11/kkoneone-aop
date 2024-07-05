@@ -49,6 +49,8 @@ public class PointBeanPostProcess implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+
+
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
 }
