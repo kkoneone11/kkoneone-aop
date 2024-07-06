@@ -47,6 +47,7 @@ public class PointBeanPostProcess implements BeanPostProcessor {
         return bean;
     }
 
+    // 如果Bean的类名匹配了特定的路径，或者Bean具有特定的注解，它将被包装在一个代理对象中，以便在调用Bean的方法前后执行额外的操作
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
 
