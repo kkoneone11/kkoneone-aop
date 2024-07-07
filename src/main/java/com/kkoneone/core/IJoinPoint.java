@@ -16,7 +16,7 @@ public interface IJoinPoint {
     default Object invoke() throws Throwable {
         return null;
     }
-
+    // 调用含参数的连接点Joint的方法
     default  Object invoke(Object[] args) throws Throwable {
         return null;
     }
