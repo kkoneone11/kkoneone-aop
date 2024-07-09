@@ -6,6 +6,7 @@ import org.springframework.cglib.proxy.MethodProxy;
 import java.lang.reflect.Method;
 
 /**
+ * 封装可执行的目标方法数据
  * @Author : huangzhengyi.hzy@alibaba-inc.com
  * @Date : 2024/7/6 22:23
  * @Description:
