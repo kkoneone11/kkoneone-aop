@@ -38,6 +38,7 @@ public class PointBeanPostProcess implements BeanPostProcessor {
         Aop aop = beanClass.getAnnotation(Aop.class);
         if(aop != null){
             String jointPath = aop.jointPath();
+            // 不为空
             if(!jointPath.equals("")){
                 jointPointPathMap.put(jointPath , bean);
             }else {
@@ -50,8 +51,16 @@ public class PointBeanPostProcess implements BeanPostProcessor {
     // 如果Bean的类名匹配了特定的路径，或者Bean具有特定的注解，它将被包装在一个代理对象中，以便在调用Bean的方法前后执行额外的操作
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        final Class<?> beanClass = bean.getClass();
+        final String path = beanClass.getName();
 
+        //看类名是否匹配对应路径
+        for(String s : jointPointPathMap.keySet()) {
+            // 和对应的key是相同的则为该bean进行代理
+            if(path.startsWith(s)){
 
+            }
+        }
         return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
     }
 }
