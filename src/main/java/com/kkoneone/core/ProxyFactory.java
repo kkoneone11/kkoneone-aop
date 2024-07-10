@@ -10,5 +10,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProxyFactory {
+    public static <T> T get(Object target , AopProxy aop) {
+        return null;
+    }
 
+    public static Object tryBuild(Object targetObject, Object aopObject){
+        return null;
+    }
 }

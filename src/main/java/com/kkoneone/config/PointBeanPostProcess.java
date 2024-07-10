@@ -29,7 +29,7 @@ public class PointBeanPostProcess implements BeanPostProcessor {
         this.jointPointPathMap = new HashMap<>();
     }
 
-    //通过反射搜索bean上有没有带有@Aop注解的，并且看看是路径还是注解放到对应的map中
+    // 拦截标注了注解的类，通过反射搜索bean上有没有带有@Aop注解的，并且看看是路径还是注解放到对应的map中
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         //获取对应bean类
@@ -38,7 +38,7 @@ public class PointBeanPostProcess implements BeanPostProcessor {
         Aop aop = beanClass.getAnnotation(Aop.class);
         if(aop != null){
             String jointPath = aop.jointPath();
-            // 不为空
+            // 路径不为空
             if(!jointPath.equals("")){
                 jointPointPathMap.put(jointPath , bean);
             }else {
