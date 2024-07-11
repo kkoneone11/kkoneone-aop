@@ -1,6 +1,7 @@
 package com.kkoneone.config;
 
 import com.kkoneone.annotation.Aop;
+import com.kkoneone.core.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class PointBeanPostProcess implements BeanPostProcessor {
         this.jointPointPathMap = new HashMap<>();
     }
 
-    // 拦截标注了注解的类，通过反射搜索bean上有没有带有@Aop注解的，并且看看是路径还是注解放到对应的map中
+    // 拦截标注了注解的类，通过反射搜索bean(aopObject)上有没有带有@Aop注解的，并且看看是路径还是注解放到对应的map中
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         //获取对应bean类
@@ -48,7 +49,7 @@ public class PointBeanPostProcess implements BeanPostProcessor {
         return bean;
     }
 
-    // 如果Bean的类名匹配了特定的路径，或者Bean具有特定的注解，它将被包装在一个代理对象中，以便在调用Bean的方法前后执行额外的操作
+    // 如果Bean(targetObject)的类名匹配了对应路径，或者Bean具有特定的注解，它将被包装在一个代理对象中，以便在调用Bean的方法前后执行额外的操作
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         final Class<?> beanClass = bean.getClass();
@@ -56,11 +57,14 @@ public class PointBeanPostProcess implements BeanPostProcessor {
 
         //看类名是否匹配对应路径
         for(String s : jointPointPathMap.keySet()) {
-            // 和对应的key是相同的则为该bean进行代理
+            // 和对应的key是前缀相同的则为该bean进行代理
             if(path.startsWith(s)){
-
+                return ProxyFactory.tryBuild(bean , jointPointPathMap.get(s));
             }
         }
-        return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
+        for(Object aopObject : jointPointAnnotationMap.values()){
+            return ProxyFactory.tryBuild(bean , aopObject);
+        }
+        return bean;
     }
 }
