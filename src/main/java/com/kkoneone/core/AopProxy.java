@@ -97,7 +97,24 @@ public class AopProxy implements MethodInterceptor {
         return methodProxy.invokeSuper(o,objects);
     }
 
-    private Object invokeMethod(Object jointObject , Method method) {
+    private Object invokeMethod(Object jointObject , Method method) throws Throwable{
+        // 如果目标方法需要参数，它，然后调用该方法；
+        Object ret = null;
+        if(method != null){
+            // 判断执行方法上面是否有目标参数
+            if(method.getParameterTypes().length > 0) {
+                // 检查 joinPoint 是否是正确的类型
+                if(!method.getParameterTypes()[0].equals(jointObject.getClass())) {
+                    throw new IllegalArgumentException("参数映射错误:非 IJoinPoint 参数");
+                }
+                ret = method.invoke(aopObject , jointObject);
+                return ret;
+            // 如果不需要参数，它直接调用该方法。
+            } else {
+                ret = method.invoke(aopObject);
+                return ret;
+            }
+        }
         return null;
     }
 
