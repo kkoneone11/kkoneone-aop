@@ -56,7 +56,7 @@ public class AopProxy implements MethodInterceptor {
      *
      * 拦截器方法，通常用于在方法执行前后添加额外的行为
      * @param o 被调用方法的目标对象
-     * @param method 被拦截的方法的 Method 对象
+     * @param method 被拦截的对象Method类
      * @param objects 方法参数数组
      * @param methodProxy 原始方法的代理对象
      * @return
@@ -72,16 +72,29 @@ public class AopProxy implements MethodInterceptor {
         if(isInterceptorAll || interceptorMethods.containsKey(hashcode)){
             // 拦截对象的加强顺序 前 -> 环绕 -> 后 -> 异常
             Object ret = null;
+            // 封装被拦截对象的信息
+            JoinPoint joinPoint = new JoinPoint(method, objects);
             try {
                 //前置方法加强
-
-            }catch (Exception e){
-                e.printStackTrace();
+                invokeMethod(joinPoint , beforeMethod);
+                //如果有环绕方法
+                if(aroundMethod!=null) {
+                    ret = invokeMethod(new ProceedingJoinPoint(method,objects,o,methodProxy),aroundMethod);
+                }else {
+                    //执行原始方法
+                    ret = methodProxy.invokeSuper(o,objects);
+                }
+                return ret;
+            }catch (Throwable throwable){
+                // 异常方法
+                throwable.printStackTrace();
+                invokeMethod(throwable , throwingMethod);
             }finally {
-
+                //后置方法
+                invokeMethod(joinPoint , afterMethod);
             }
         }
-        return null;
+        return methodProxy.invokeSuper(o,objects);
     }
 
     private Object invokeMethod(Object jointObject , Method method) {

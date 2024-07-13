@@ -23,7 +23,12 @@ public class ProxyFactory {
         return (T) enhancer.create();
     }
 
+    // 根据特定的条件来决定是否需要对给定的目标对象（targetObject）进行增强，并返回原始对象或增强后的代理对象
     public static Object tryBuild(Object targetObject, Object aopObject){
+        //是否返回AOP代理对象
+
+        // 设置 aopObject 中增强方法
+        // 如果是以路径进行拦截，因路径最小单元为类级别，因此直接将整个类中的方法进行增强
         return null;
     }
 
