@@ -1,7 +1,12 @@
 package com.kkoneone.core;
 
+import com.kkoneone.annotation.Aop;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.stereotype.Component;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * @Author : huangzhengyi.hzy@alibaba-inc.com
@@ -26,10 +31,38 @@ public class ProxyFactory {
     // 根据特定的条件来决定是否需要对给定的目标对象（targetObject）进行增强，并返回原始对象或增强后的代理对象
     public static Object tryBuild(Object targetObject, Object aopObject){
         //是否返回AOP代理对象
+        boolean isRetAopProxy = false;
+        final AopProxy aopProxy = new AopProxy();
+        final Aop aop = aopObject.getClass().getAnnotation(Aop.class);
 
         // 设置 aopObject 中增强方法
+        aopProxy.setEnhancermethods(aopObject);
         // 如果是以路径进行拦截，因路径最小单元为类级别，因此直接将整个类中的方法进行增强
-        return null;
+        if(!Strings.isBlank(aop.jointPath())){
+            aopProxy.isInterceptorAll = true;
+            isRetAopProxy = true;
+        }else {
+            final Class<? extends Annotation> aopAnnotation = aop.jointAnnotationClass();
+            final Class<?> targetObjectClass = targetObject.getClass();
+            // 如果是类级别
+            if (targetObjectClass.isAnnotationPresent(aopAnnotation)){
+                aopProxy.isInterceptorAll = true;
+                isRetAopProxy = true;
+            // 方法级别
+            }else {
+                for (Method method : targetObjectClass.getMethods()){
+                    if(method.isAnnotationPresent(aopAnnotation)) {
+                        isRetAopProxy = true;
+                        aopProxy.interceptorMethods.put(method.hashCode() , method);
+                    }
+                }
+            }
+        }
+        if(isRetAopProxy) {
+            return get(targetObject , aopProxy);
+        }else {
+            return targetObject;
+        }
     }
 
 }
