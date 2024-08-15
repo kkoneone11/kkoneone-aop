@@ -1,5 +1,6 @@
 package com.kkoneone.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -12,8 +13,7 @@ import java.lang.annotation.Target;
  * @Date : 2024/6/14 16:57
  * @Description:
  **/
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Configuration
 @Import(PointBeanPostProcess.class) //表示使用这个注解会自动启用PointBeanPostProcess
 public @interface EnableAop {
 
