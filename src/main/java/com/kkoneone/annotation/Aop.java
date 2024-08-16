@@ -11,6 +11,7 @@ import java.lang.annotation.*;
  **/
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Component
 public @interface Aop {
 
     //基于路径aop
