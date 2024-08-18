@@ -44,11 +44,11 @@ public class ProxyFactory {
         }else {
             final Class<? extends Annotation> aopAnnotation = aop.jointAnnotationClass();
             final Class<?> targetObjectClass = targetObject.getClass();
-            // 如果是类级别
+            //看切面类上是否有自定义注解表示增强
             if (targetObjectClass.isAnnotationPresent(aopAnnotation)){
                 aopProxy.isInterceptorAll = true;
                 isRetAopProxy = true;
-            // 方法级别
+            // 看切面类的方法上是否有自定义注解增强
             }else {
                 for (Method method : targetObjectClass.getMethods()){
                     if(method.isAnnotationPresent(aopAnnotation)) {
