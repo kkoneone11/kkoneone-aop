@@ -30,7 +30,7 @@ public class PointBeanPostProcess implements BeanPostProcessor {
         this.jointPointPathMap = new HashMap<>();
     }
 
-    // 拦截标注了注解的类，通过反射搜索bean(aopObject)上有没有带有@Aop注解的，并且看看是路径还是注解放到对应的map中
+    // 拦截标注了注解的类，通过反射搜索bean(aopObject)上有没有带@Aop注解带上了则表明上目标切面类，并且看看是路径还是注解放到对应的map中
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         //获取对应bean类
