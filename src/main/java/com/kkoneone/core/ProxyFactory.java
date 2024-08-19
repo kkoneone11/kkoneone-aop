@@ -34,7 +34,7 @@ public class ProxyFactory {
         boolean isRetAopProxy = false;
         final AopProxy aopProxy = new AopProxy();
         final Aop aop = aopObject.getClass().getAnnotation(Aop.class);
-
+        aopProxy.aopObject = aopObject;
         // 设置 aopObject 中增强方法
         aopProxy.setEnhancermethods(aopObject);
         // 如果是以路径进行拦截，因路径最小单元为类级别，因此直接将整个类中的方法进行增强
