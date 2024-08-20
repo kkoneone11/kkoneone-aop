@@ -76,11 +76,11 @@ public class AopProxy implements MethodInterceptor {
             JoinPoint joinPoint = new JoinPoint(method, objects);
             try {
                 //前置方法加强
-                System.out.println("开启前置方法加强");
+                System.out.println("....开启前置方法加强");
                 invokeMethod(joinPoint , beforeMethod);
                 //如果有环绕方法
                 if(aroundMethod!=null) {
-                    System.out.println("开启环绕方法加强");
+                    System.out.println(".....开启环绕方法加强");
                     ret = invokeMethod(new ProceedingJoinPoint(method,objects,o,methodProxy),aroundMethod);
                 }else {
                     //执行原始方法
@@ -92,7 +92,7 @@ public class AopProxy implements MethodInterceptor {
                 throwable.printStackTrace();
                 invokeMethod(throwable , throwingMethod);
             }finally {
-                System.out.println("开启后置方法加强");
+                System.out.println(".....开启后置方法加强");
                 //后置方法
                 invokeMethod(joinPoint , afterMethod);
             }
